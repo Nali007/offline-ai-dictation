@@ -1,6 +1,36 @@
 # Changelog
 
-All notable changes to this fork. Versions before 1.0.0 were betas; 0.3.0 is the last version of the [original app](https://github.com/kafkasl/phone-whisper) by Pol Alvarez.
+## Offline AI Dictation
+
+Offline AI Dictation started from Phone Whisper 1.3.0 by evilknivel (below), which started from Pol Alvarez's original app. Its versions start again at 0.1.0.
+
+### 0.1.2 – 2026-11-11
+
+- The floating button is green (emerald) at rest, so it can't be mixed up with Phone Whisper's dark button. Red while recording, grey while working and the dark ✕ stay as they were.
+
+### 0.1.1 – 2026-11-11
+
+Offline only, unless you choose otherwise.
+
+- Translation is gone from every screen: no Translation row, and holding the button no longer opens the half circle of languages.
+- Online speech and online cleanup moved to Advanced → Online, both off by default, each with a plain warning that audio or text goes over the internet. Their settings and "API keys" appear on the main screen only while one is switched on.
+- Setup no longer asks "Offline or online?" or for an API key. It goes from the microphone to the speech model, then the permission and keep-running steps.
+- For now, holding the button gives plain text like a tap: the only cleanup was the online one. The offline cleanup comes next.
+
+### 0.1.0 – 2026-11-11
+
+Its own app, which installs next to Phone Whisper. It works exactly like Phone Whisper 1.3.0.
+
+- New name everywhere on screen: Offline AI Dictation.
+- New app ID (com.naj.offlineaidictation), so it doesn't replace Phone Whisper on your phone.
+- Placeholder icon: a white microphone on green. The real icon comes with the redesign.
+- About shows the credits to Pol Alvarez and evilknivel and the Apache 2.0 license.
+- Signed with Naj's own key, so future versions install over this one.
+- Removed Phone Whisper's logo, website and German README, which belong to the original app.
+
+## Phone Whisper (evilknivel's fork)
+
+All notable changes to evilknivel's fork. Versions before 1.0.0 were betas; 0.3.0 is the last version of the [original app](https://github.com/kafkasl/phone-whisper) by Pol Alvarez.
 
 ## 1.3.0 – 2026-10-28
 

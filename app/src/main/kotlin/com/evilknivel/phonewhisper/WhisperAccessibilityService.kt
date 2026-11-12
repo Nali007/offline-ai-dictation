@@ -41,7 +41,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.evilknivel.phonewhisper.Prefs.cancelOnScreenOff
-import com.evilknivel.phonewhisper.Prefs.cleanupMode
+import com.evilknivel.phonewhisper.Prefs.effectiveCleanupMode
 import com.evilknivel.phonewhisper.Prefs.edgeGlow
 import com.evilknivel.phonewhisper.Prefs.haptics
 import com.evilknivel.phonewhisper.Prefs.buttonPosition
@@ -95,6 +95,8 @@ class WhisperAccessibilityService : AccessibilityService() {
         private const val LEVEL_UPDATE_MS = 50L
 
         private const val COLOR_IDLE = 0xDD1C1C1E.toInt()
+        /** The button at rest: Offline AI Dictation's emerald (brand and "ready" color from the build brief). */
+        private const val COLOR_READY = 0xDD0F7B5F.toInt()
         private const val COLOR_RECORDING = 0xDDEF4444.toInt()
         private const val COLOR_RECORDING_CLEANUP = 0xDD8B5CF6.toInt()
         private const val COLOR_BUSY = 0xDD6B6B6B.toInt()
@@ -342,7 +344,7 @@ class WhisperAccessibilityService : AccessibilityService() {
             setImageResource(R.drawable.ic_mic)
             scaleType = ImageView.ScaleType.CENTER_INSIDE
             setPadding(pad, pad, pad, pad)
-            background = circle(COLOR_IDLE)
+            background = circle(COLOR_READY)
         }
 
         val bars = LevelBarsView(this).apply { visibility = View.GONE }
@@ -566,7 +568,7 @@ class WhisperAccessibilityService : AccessibilityService() {
     private fun startHoldRing() {
         val ring = holdRing ?: return
         ring.color = when (state) {
-            State.IDLE -> if (prefs().cleanupMode() != Prefs.CLEANUP_NEVER) COLOR_RECORDING_CLEANUP else COLOR_RECORDING
+            State.IDLE -> if (prefs().effectiveCleanupMode() != Prefs.CLEANUP_NEVER) COLOR_RECORDING_CLEANUP else COLOR_RECORDING
             State.RETRY -> COLOR_RETRY
             else -> return
         }
@@ -769,7 +771,7 @@ class WhisperAccessibilityService : AccessibilityService() {
     private fun applyAppearance() {
         val img = button ?: return
         val (color, icon) = when (state) {
-            State.IDLE -> COLOR_IDLE to R.drawable.ic_mic
+            State.IDLE -> COLOR_READY to R.drawable.ic_mic
             State.RECORDING -> (if (cleanupThisDictation) COLOR_RECORDING_CLEANUP else COLOR_RECORDING) to null
             State.TRANSCRIBING -> COLOR_BUSY to R.drawable.ic_mic
             State.RETRY -> COLOR_RETRY to R.drawable.ic_retry
@@ -798,7 +800,7 @@ class WhisperAccessibilityService : AccessibilityService() {
 
     private fun onTap() {
         when (state) {
-            State.IDLE -> startRecording(cleanup = prefs().cleanupMode() == Prefs.CLEANUP_ALWAYS)
+            State.IDLE -> startRecording(cleanup = prefs().effectiveCleanupMode() == Prefs.CLEANUP_ALWAYS)
             State.RECORDING -> stopAndTranscribe()
             State.TRANSCRIBING -> {}
             State.RETRY -> retry()
@@ -806,16 +808,14 @@ class WhisperAccessibilityService : AccessibilityService() {
     }
 
     /**
-     * Holding the button starts a dictation with AI cleanup (unless cleanup is set to "never") and
-     * opens the arc: sliding the thumb onto a language translates the dictation, "+" and the gear
-     * open the settings.
+     * Holding the button starts a dictation with AI cleanup (unless cleanup is off). Offline AI
+     * Dictation has no translation, so the arc (showArc) isn't opened; it comes back for rewrite styles.
      */
     private fun onLongPress() {
         when (state) {
             State.IDLE -> {
-                val cleanup = prefs().cleanupMode() != Prefs.CLEANUP_NEVER
+                val cleanup = prefs().effectiveCleanupMode() != Prefs.CLEANUP_NEVER
                 startRecording(cleanup, held = true)
-                if (state == State.RECORDING) showArc()
             }
             // Kept as a shortcut; the visible way is the ✕ next to the button.
             State.RETRY -> discardFailed()
@@ -921,7 +921,7 @@ class WhisperAccessibilityService : AccessibilityService() {
     private fun startRecording(cleanup: Boolean, held: Boolean = false) {
         if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO)
             != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-            showFeedback("Grant audio permission in the Phone Whisper app", 3000); return
+            showFeedback("Grant audio permission in the Offline AI Dictation app", 3000); return
         }
 
         val bufSize = AudioRecord.getMinBufferSize(
@@ -1108,7 +1108,7 @@ class WhisperAccessibilityService : AccessibilityService() {
 
         if (localTranscriber == null && !modelLoading) {
             if (LocalTranscriber.availableModels(this).isEmpty()) {
-                fail(null, "No local model. Download one in the Phone Whisper app.")
+                fail(null, "No local model. Download one in the Offline AI Dictation app.")
                 return
             }
             reloadModel()
@@ -1178,7 +1178,7 @@ class WhisperAccessibilityService : AccessibilityService() {
         val target = prefs().transcriptionTarget()
         if (!target.isConfigured) {
             val missing = if (target.baseUrl.isBlank()) "custom API address" else "${target.provider.label} API key"
-            fail(pcm, "Set the $missing in Phone Whisper"); return
+            fail(pcm, "Set the $missing in Offline AI Dictation"); return
         }
 
         val audio = if (trimmed) floatsToPcm(samples) else pcm

@@ -40,9 +40,9 @@ jobs:
           RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
-      - run: cp app/build/outputs/apk/release/app-release.apk "phone-whisper-${GITHUB_REF_NAME}.apk"
+      - run: cp app/build/outputs/apk/release/app-release.apk "offline-ai-dictation-${GITHUB_REF_NAME}.apk"
       - uses: softprops/action-gh-release@v2
         with:
-          files: phone-whisper-${{ github.ref_name }}.apk
+          files: offline-ai-dictation-${{ github.ref_name }}.apk
           prerelease: ${{ contains(github.ref_name, '-') }}
           generate_release_notes: true

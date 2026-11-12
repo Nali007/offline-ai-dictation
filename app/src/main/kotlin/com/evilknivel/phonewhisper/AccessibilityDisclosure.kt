@@ -14,7 +14,7 @@ object AccessibilityDisclosure {
     const val CONSENT_PREF = "accessibility_consent"
 
     const val TEXT =
-        "Phone Whisper uses Android's Accessibility Service for two things:\n\n" +
+        "Offline AI Dictation uses Android's Accessibility Service for two things:\n\n" +
             "• to insert your dictated text into the text field that has focus, after you tap the button\n" +
             "• to see whether a keyboard is open, so the button can be shown only then\n\n" +
             "It does nothing until you tap the button. It does not read, log or store what is on your " +

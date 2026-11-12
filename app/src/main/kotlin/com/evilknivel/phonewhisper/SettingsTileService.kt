@@ -7,7 +7,7 @@ import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 
-/** A Quick Settings tile that opens the Phone Whisper settings from anywhere. */
+/** A Quick Settings tile that opens the Offline AI Dictation settings from anywhere. */
 class SettingsTileService : TileService() {
 
     override fun onStartListening() {

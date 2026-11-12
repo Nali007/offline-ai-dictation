@@ -57,6 +57,19 @@ object Prefs {
     fun SharedPreferences.cleanupMode(): String = getString(CLEANUP_MODE, null)
         ?: if (getBoolean("use_post_processing", false)) CLEANUP_ALWAYS else CLEANUP_HOLD
 
+    /**
+     * Online cleanup (a cloud chat model with the user's own key) is off unless switched on under
+     * Advanced. While it's off, no dictation is cleaned up: the offline cleanup comes in a later step.
+     */
+    const val ONLINE_CLEANUP = "online_cleanup"
+    fun SharedPreferences.onlineCleanup() = getBoolean(ONLINE_CLEANUP, false)
+
+    /** Online speech is the old cloud transcription: `use_local` off. */
+    fun SharedPreferences.onlineSpeech() = !getBoolean("use_local", true)
+
+    /** The cleanup mode the button actually uses: "never" while online cleanup is off. */
+    fun SharedPreferences.effectiveCleanupMode(): String = if (onlineCleanup()) cleanupMode() else CLEANUP_NEVER
+
     val CLEANUP_CHOICES = listOf(
         CLEANUP_HOLD to "Only when I hold the button",
         CLEANUP_ALWAYS to "Always",

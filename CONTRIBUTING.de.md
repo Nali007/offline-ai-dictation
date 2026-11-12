@@ -2,11 +2,11 @@
 
 [English](CONTRIBUTING.md) | **Deutsch**
 
-Danke, dass du bei Phone Whisper mithilfst! Fehlerberichte, Ideen, Übersetzungen und Code sind gleichermaßen willkommen.
+Danke, dass du bei Offline AI Dictation mithilfst! Fehlerberichte, Ideen, Übersetzungen und Code sind gleichermaßen willkommen.
 
 ## Fehler und Ideen melden
 
-Eröffne ein Issue unter [github.com/evilknivel/phone-whisper/issues](https://github.com/evilknivel/phone-whisper/issues). Gib bei Fehlern bitte dein Handymodell, die Android-Version, die App-Version (steht unter **About** in den Einstellungen), die App, in die du diktiert hast, und an, was der Button und seine Meldung angezeigt haben.
+Eröffne ein Issue unter [github.com/Nali007/offline-ai-dictation/issues](https://github.com/Nali007/offline-ai-dictation/issues). Gib bei Fehlern bitte dein Handymodell, die Android-Version, die App-Version (steht unter **About** in den Einstellungen), die App, in die du diktiert hast, und an, was der Button und seine Meldung angezeigt haben.
 
 ## Übersetzungen
 
@@ -19,13 +19,13 @@ Die Texte stehen noch direkt im Kotlin-Code, deshalb gibt es zwei Wege mitzuhelf
 
 Modellnamen, Anbieternamen und Fachbegriffe wie „API key“ sollten erkennbar bleiben, und Platzhalter wie `%1$s` bitte unverändert lassen.
 
-Die Dokumentation wird immer auf Englisch gepflegt. Weitere Sprachen sind als zusätzliche Dateien mit Sprachumschalter oben willkommen, wie `README.de.md`.
+Die Dokumentation wird immer auf Englisch gepflegt. Weitere Sprachen sind als zusätzliche Dateien mit Sprachumschalter oben willkommen, wie `PRIVACY.de.md`.
 
 ## Code
 
 - Bauen und testen: `make build`, `make test`. [CLAUDE.md](CLAUDE.md) erklärt Architektur und Konventionen.
 - Nach Änderungen an der lokalen Transkription, am Modellkatalog oder an der sherpa-onnx-Version `make integration-test` ausführen (siehe CLAUDE.md).
-- Pull Requests bitte fokussiert halten, Unit-Tests für Logik ergänzen, die auf der JVM läuft, und README.md, README.de.md sowie CHANGELOG.md anpassen, wenn sich Verhalten ändert.
+- Pull Requests bitte fokussiert halten, Unit-Tests für Logik ergänzen, die auf der JVM läuft, und README.md sowie CHANGELOG.md anpassen, wenn sich Verhalten ändert.
 - `PRIVACY.md` muss zu dem passen, was die App über das Netz sendet.
 
 Mit deinem Beitrag stimmst du zu, dass er unter der [Apache License 2.0](LICENSE) steht.

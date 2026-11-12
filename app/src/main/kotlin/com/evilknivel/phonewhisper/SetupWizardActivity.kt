@@ -22,8 +22,8 @@ import com.evilknivel.phonewhisper.Prefs.cleanupMode
 import java.util.Locale
 
 /**
- * First-run setup: explains the app, then walks through the microphone permission, offline or
- * online transcription, a model or a provider with its key, AI cleanup, the accessibility
+ * First-run setup: explains the app, then walks through the microphone permission, a speech
+ * model (offline; the online, cloud and cleanup steps below are skipped by visibleSteps), the accessibility
  * service (with the disclosure Google Play requires), and the phone maker's settings that keep it
  * running. Every choice is written to the same prefs
  * the settings screens use, so the assistant can be run again at any time.
@@ -74,11 +74,15 @@ class SetupWizardActivity : SettingsScreen() {
 
     // --- Navigation ---
 
-    /** Local mode skips the cloud step and vice versa. */
+    /**
+     * Offline AI Dictation sets up offline only: the online choice, the cloud step and the online
+     * cleanup step are skipped (the online options live under Advanced, off by default). With online
+     * speech already switched on there, the model step is skipped too.
+     */
     private fun visibleSteps() = Step.entries.filter {
         when (it) {
+            Step.MODE, Step.CLOUD, Step.CLEANUP -> false
             Step.LOCAL_MODEL -> useLocal
-            Step.CLOUD -> !useLocal
             else -> true
         }
     }
@@ -160,19 +164,18 @@ class SetupWizardActivity : SettingsScreen() {
 
     private fun welcome() = page("Welcome", nextLabel = "Start setup") {
         addView(text(
-            "Phone Whisper lets you dictate into almost any app, without changing your keyboard.\n\n" +
+            "Offline AI Dictation lets you dictate into almost any app, without changing your keyboard.\n\n" +
                 "• A small button appears while a keyboard is open.\n" +
                 "• Tap it, speak, tap again: your words appear in the text field.\n" +
-                "• Hold it instead to have an AI polish punctuation and grammar.\n\n" +
-                "This assistant sets up the microphone, where your speech is turned into text, " +
-                "optional AI cleanup, the permission to insert text, and your phone's settings that keep " +
-                "Phone Whisper running. It takes about two minutes."
+                "• Everything happens on your phone. Nothing is sent over the internet.\n\n" +
+                "This assistant sets up the microphone, the speech model, the permission to insert text, " +
+                "and your phone's settings that keep Offline AI Dictation running. It takes about two minutes."
         ))
         addView(settingsRow("Skip setup", "Set everything up yourself in the settings") { finishSetup() })
     }
 
     private fun microphone() = page("Microphone") {
-        addView(text("Phone Whisper records only while you dictate: from your tap until your second tap."))
+        addView(text("Offline AI Dictation records only while you dictate: from your tap until your second tap."))
         val status = settingsRow("Allow microphone", "") {
             ActivityCompat.requestPermissions(this@SetupWizardActivity, arrayOf(Manifest.permission.RECORD_AUDIO), 1)
         }
@@ -206,7 +209,7 @@ class SetupWizardActivity : SettingsScreen() {
 
     private fun localModel() = page("Choose a model", onNext = {
         val installed = MODEL_CATALOG.any { ModelDownloader.isInstalled(this, it) || ModelDownloader.state(it) != null }
-        if (!installed) toast("Download a model first, or go back and choose online")
+        if (!installed) toast("Download a model first")
         installed
     }) {
         addView(text("Tap a model to download and use it. The download continues if you go on."))
@@ -319,7 +322,7 @@ class SetupWizardActivity : SettingsScreen() {
             "Only needed if you installed the APK yourself. If the ⋮ menu doesn't offer it, go on with step 2: " +
                 "some Android versions show it only after Android has refused once (\"App was denied access\")."
         ))
-        val open = settingsRow("2. Turn on Phone Whisper", "") {
+        val open = settingsRow("2. Turn on Offline AI Dictation", "") {
             if (!agree.isChecked) { toast("Please read and agree first"); return@settingsRow }
             AccessibilityDisclosure.giveConsent(this@SetupWizardActivity)
             AccessibilityDisclosure.openSettings(this@SetupWizardActivity)
@@ -327,8 +330,8 @@ class SetupWizardActivity : SettingsScreen() {
         val sub = open.subtitle()
         onRefresh {
             sub.visibility = View.VISIBLE
-            sub.text = if (WhisperAccessibilityService.instance != null) "✓ Phone Whisper is enabled"
-                else "Opens the accessibility settings: find \"Phone Whisper\" under installed apps and turn it on"
+            sub.text = if (WhisperAccessibilityService.instance != null) "✓ Offline AI Dictation is enabled"
+                else "Opens the accessibility settings: find \"Offline AI Dictation\" under installed apps and turn it on"
         }
         addView(open)
     }
@@ -340,7 +343,7 @@ class SetupWizardActivity : SettingsScreen() {
 
     private fun done() = page("All set", nextLabel = "Finish") {
         addView(text(
-            "Open any app and tap into a text field. The Phone Whisper button appears next to the keyboard.\n\n" +
+            "Open any app and tap into a text field. The Offline AI Dictation button appears next to the keyboard.\n\n" +
                 "• Tap: dictate. Tap again to stop.\n" +
                 "• Hold: dictate with AI cleanup (the button turns purple).\n" +
                 "• Orange button: something went wrong. Tap to retry, or tap the ✕ next to it to discard.\n\n" +

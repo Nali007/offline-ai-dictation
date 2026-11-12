@@ -19,5 +19,5 @@ jobs:
       - run: ./gradlew testDebugUnitTest assembleDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: phone-whisper-debug-apk
+          name: offline-ai-dictation-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk

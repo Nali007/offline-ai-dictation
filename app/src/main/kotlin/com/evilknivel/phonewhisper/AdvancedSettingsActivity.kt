@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.evilknivel.phonewhisper.Prefs.idleReleaseMinutes
 import com.evilknivel.phonewhisper.Prefs.micSource
 import com.evilknivel.phonewhisper.Prefs.numThreads
+import com.evilknivel.phonewhisper.Prefs.onlineSpeech
 
 class AdvancedSettingsActivity : SettingsScreen() {
 
@@ -56,6 +57,25 @@ class AdvancedSettingsActivity : SettingsScreen() {
                 onPick = { prefs().edit().putString(Prefs.MIC_SOURCE, it).apply() },
             ))
             addView(note("Try \"Standard microphone\" if recordings are too quiet on your phone."))
+
+            addView(sectionHeader("Online (off by default)"))
+            addView(toggleRow(
+                "Online speech", "Turn speech into text with OpenAI, OpenRouter or your own server",
+                get = { prefs().onlineSpeech() },
+            ) { online ->
+                prefs().edit().putBoolean("use_local", !online).apply()
+                // Loads the phone's model again, or frees it while online.
+                WhisperAccessibilityService.instance?.reloadModel()
+            })
+            addView(note("When this is on, your recordings go over the internet to that service. It needs your own API key."))
+            addView(switchRow(
+                "Online cleanup", "Clean up text with OpenAI, OpenRouter or your own server",
+                Prefs.ONLINE_CLEANUP, false
+            ))
+            addView(note(
+                "When this is on, the text of your dictations goes over the internet to that service. " +
+                    "It needs your own API key. Its settings appear on the main screen."
+            ))
         }
     }
 }

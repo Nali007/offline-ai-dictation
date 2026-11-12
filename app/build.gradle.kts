@@ -1,3 +1,4 @@
+import java.util.Properties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -9,24 +10,31 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.evilknivel.phonewhisper"
+        // Offline AI Dictation's own ID, so it installs next to Phone Whisper. Never change it after release.
+        // (The Kotlin package above stays com.evilknivel.phonewhisper so upstream fixes still merge cleanly.)
+        applicationId = "com.naj.offlineaidictation"
         minSdk = 30
         targetSdk = 36
-        versionCode = 17
-        versionName = "1.3.0"
+        versionCode = 3
+        versionName = "0.1.2"
 
         ndk { abiFilters += "arm64-v8a" }
     }
 
-    // Release builds are signed with a fixed key from the environment (see .github/workflows/release.yml),
-    // so new versions install over old ones. Without it they fall back to the debug key.
-    val releaseKeystore = System.getenv("RELEASE_KEYSTORE_FILE")?.let(::file)?.takeIf { it.exists() }
+    // Release builds are signed with a fixed key, so new versions install over old ones. The key comes from
+    // keystore.properties in the project folder (local builds; never committed) or from the environment
+    // (see .github/workflows/release.yml). Without either they fall back to the debug key.
+    val signingProps = Properties().apply {
+        rootProject.file("keystore.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
+    }
+    fun signing(name: String, env: String): String? = signingProps.getProperty(name) ?: System.getenv(env)
+    val releaseKeystore = signing("storeFile", "RELEASE_KEYSTORE_FILE")?.let(::file)?.takeIf { it.exists() }
     signingConfigs {
         if (releaseKeystore != null) create("release") {
             storeFile = releaseKeystore
-            storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD")
-            keyAlias = System.getenv("RELEASE_KEY_ALIAS")
-            keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+            storePassword = signing("storePassword", "RELEASE_KEYSTORE_PASSWORD")
+            keyAlias = signing("keyAlias", "RELEASE_KEY_ALIAS")
+            keyPassword = signing("keyPassword", "RELEASE_KEY_PASSWORD")
         }
     }
 

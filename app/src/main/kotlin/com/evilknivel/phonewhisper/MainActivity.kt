@@ -18,7 +18,8 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.evilknivel.phonewhisper.Prefs.cleanupMode
 import com.evilknivel.phonewhisper.Prefs.language
-import com.evilknivel.phonewhisper.Prefs.translationLanguages
+import com.evilknivel.phonewhisper.Prefs.effectiveCleanupMode
+import com.evilknivel.phonewhisper.Prefs.onlineCleanup
 
 /**
  * The main settings screen: status, setup, transcription (cloud or local models) and cleanup.
@@ -32,6 +33,8 @@ class MainActivity : SettingsScreen() {
     private lateinit var cloudContainer: LinearLayout
     private lateinit var modelContainer: LinearLayout
     private lateinit var promptContainer: LinearLayout
+    private lateinit var cleanupSection: LinearLayout
+    private lateinit var apiKeysRow: View
 
     private val modelRows = mutableMapOf<String, ModelRowViews>()
     private val promptRows = mutableMapOf<String, PromptRowViews>()
@@ -58,7 +61,7 @@ class MainActivity : SettingsScreen() {
         super.onCreate(savedInstanceState)
         migratePrompts()
 
-        setScreen("Phone Whisper") {
+        setScreen("Offline AI Dictation") {
             val statusRow = settingsRow("Status", "Checking...")
             statusSubtitle = statusRow.subtitle()
             addView(statusRow)
@@ -85,14 +88,6 @@ class MainActivity : SettingsScreen() {
 
             // --- Transcription ---
             addView(sectionHeader("Transcription"))
-            addView(toggleRow(
-                "Use cloud transcription", "OpenAI, OpenRouter or your own server",
-                get = { !prefs().getBoolean("use_local", true) },
-            ) { cloud ->
-                prefs().edit().putBoolean("use_local", !cloud).apply()
-                // Loads the local model, or frees it in cloud mode.
-                WhisperAccessibilityService.instance?.reloadModel()
-            })
             addView(choiceRow(
                 "Your language",
                 Prefs.LANGUAGES,
@@ -101,9 +96,8 @@ class MainActivity : SettingsScreen() {
                 onPick = { prefs().edit().putString(Prefs.LANGUAGE, it).apply() },
             ))
             addView(note(
-                "The language you speak. Used by Whisper and cloud transcription, and as the source when " +
-                    "translating. Set it if short dictations come out in the wrong language. Parakeet always " +
-                    "detects the language itself."
+                "The language you speak. Used by Whisper and online speech. Set it if short dictations " +
+                    "come out in the wrong language. Parakeet always detects the language itself."
             ))
 
             cloudContainer = vertical(0).apply {
@@ -118,48 +112,43 @@ class MainActivity : SettingsScreen() {
             }
             addView(modelContainer)
 
-            // --- Cleanup ---
-            addView(sectionHeader("AI cleanup"))
-            addView(choiceRow(
-                "Clean up with AI",
-                Prefs.CLEANUP_CHOICES,
-                current = { prefs().cleanupMode() },
-                onPick = { prefs().edit().putString(Prefs.CLEANUP_MODE, it).apply() },
-            ))
-            addView(note(
-                "A language model fixes punctuation, grammar and recognition errors. " +
-                    "Tap the button for a plain dictation; hold it to dictate with cleanup (the button turns purple)."
-            ))
-            val translationRow = navRow("Translation", "", TranslationSettingsActivity::class.java)
-            val translationSub = translationRow.subtitle()
-            onRefresh {
-                val selected = prefs().translationLanguages()
-                translationSub.visibility = View.VISIBLE
-                translationSub.text = if (selected.isEmpty()) "Hold, then slide onto a language: pick languages"
-                    else "Hold, then slide onto: " + selected.joinToString(" · ") { it.uppercase() }
-            }
-            addView(translationRow)
-            promptContainer = vertical(0).apply {
-                addView(providerRow(CloudTask.POST_PROCESSING, "Cleanup provider"))
-                addView(modelRow(CloudTask.POST_PROCESSING, "Cleanup model"))
-                for (preset in promptPresets()) addView(buildPromptRow(preset))
-                val editRow = settingsRow("Edit current prompt", "") { promptPostProcessing() }
-                val editSub = editRow.subtitle().apply {
-                    maxLines = 2
-                    ellipsize = android.text.TextUtils.TruncateAt.END
+            // --- Cleanup (online only for now; shown while "Online cleanup" is on under Advanced) ---
+            cleanupSection = vertical(0).apply {
+                addView(sectionHeader("AI cleanup (online)"))
+                addView(choiceRow(
+                    "Clean up with AI",
+                    Prefs.CLEANUP_CHOICES,
+                    current = { prefs().cleanupMode() },
+                    onPick = { prefs().edit().putString(Prefs.CLEANUP_MODE, it).apply() },
+                ))
+                addView(note(
+                    "A language model fixes punctuation, grammar and recognition errors. " +
+                        "Tap the button for a plain dictation; hold it to dictate with cleanup (the button turns purple)."
+                ))
+                promptContainer = vertical(0).apply {
+                    addView(providerRow(CloudTask.POST_PROCESSING, "Cleanup provider"))
+                    addView(modelRow(CloudTask.POST_PROCESSING, "Cleanup model"))
+                    for (preset in promptPresets()) addView(buildPromptRow(preset))
+                    val editRow = settingsRow("Edit current prompt", "") { promptPostProcessing() }
+                    val editSub = editRow.subtitle().apply {
+                        maxLines = 2
+                        ellipsize = android.text.TextUtils.TruncateAt.END
+                    }
+                    onRefresh { editSub.visibility = View.VISIBLE; editSub.text = currentPrompt() }
+                    addView(editRow)
                 }
-                onRefresh { editSub.visibility = View.VISIBLE; editSub.text = currentPrompt() }
-                addView(editRow)
+                addView(promptContainer)
             }
-            addView(promptContainer)
+            addView(cleanupSection)
 
             // --- More ---
             addView(sectionHeader("More settings"))
             addView(navRow("Setup assistant", "Walk through the setup again", SetupWizardActivity::class.java))
-            addView(navRow("API keys", "OpenAI, OpenRouter and custom server", ApiKeysActivity::class.java))
+            apiKeysRow = navRow("API keys", "OpenAI, OpenRouter and custom server", ApiKeysActivity::class.java)
+            addView(apiKeysRow)
             addView(navRow("Button & insertion", "When the button shows, vibration, clipboard", ButtonSettingsActivity::class.java))
-            addView(navRow("Advanced", "CPU threads, memory, silence trimming, microphone", AdvancedSettingsActivity::class.java))
-            addView(settingsRow("About", "Phone Whisper ${appVersion()} · fork of kafkasl/phone-whisper") {
+            addView(navRow("Advanced", "CPU threads, memory, silence trimming, microphone, online options", AdvancedSettingsActivity::class.java))
+            addView(settingsRow("About", "Offline AI Dictation ${appVersion()} · based on Phone Whisper by Pol Alvarez and evilknivel · Apache 2.0") {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL)))
             })
         }
@@ -413,7 +402,7 @@ class MainActivity : SettingsScreen() {
         val audio = hasPerm(Manifest.permission.RECORD_AUDIO)
         val acc = accessibilityState()
         val useLocal = prefs().getBoolean("use_local", true)
-        val cleanupMode = prefs().cleanupMode()
+        val cleanupMode = prefs().effectiveCleanupMode()
         // Only "always" makes cleanup part of every dictation; in "hold" mode a missing key just
         // means held dictations stay raw.
         val usePostProcessing = cleanupMode == Prefs.CLEANUP_ALWAYS
@@ -432,7 +421,10 @@ class MainActivity : SettingsScreen() {
 
         modelContainer.visibility = if (useLocal) View.VISIBLE else View.GONE
         cloudContainer.visibility = if (useLocal) View.GONE else View.VISIBLE
-        promptContainer.visibility = if (cleanupMode != Prefs.CLEANUP_NEVER) View.VISIBLE else View.GONE
+        promptContainer.visibility = if (prefs().cleanupMode() != Prefs.CLEANUP_NEVER) View.VISIBLE else View.GONE
+        // Online options are hidden unless switched on under Advanced.
+        cleanupSection.visibility = if (prefs().onlineCleanup()) View.VISIBLE else View.GONE
+        apiKeysRow.visibility = if (!useLocal || prefs().onlineCleanup()) View.VISIBLE else View.GONE
 
         val cur = prefs().getString("model_name", "") ?: ""
         if (cur !in installedModels) {
@@ -598,6 +590,6 @@ class MainActivity : SettingsScreen() {
         packageManager.getPackageInfo(packageName, 0).versionName.orEmpty()
 
     companion object {
-        private const val REPO_URL = "https://github.com/evilknivel/phone-whisper"
+        private const val REPO_URL = "https://github.com/Nali007/offline-ai-dictation"
     }
 }

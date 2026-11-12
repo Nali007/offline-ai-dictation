@@ -28,7 +28,7 @@ object TranscriberClient {
 
     /** [language] is an ISO 639-1 code; "" lets the provider detect it. */
     fun transcribe(wavData: ByteArray, target: CloudTarget, language: String = "", callback: (Result) -> Unit) {
-        if (target.baseUrl.isBlank()) { callback(Result(null, "Set the custom API address in Phone Whisper")); return }
+        if (target.baseUrl.isBlank()) { callback(Result(null, "Set the custom API address in Offline AI Dictation")); return }
         val request = try {
             when (target.provider) {
                 CloudProvider.OPENAI, CloudProvider.CUSTOM -> openAiRequest(wavData, target, language)

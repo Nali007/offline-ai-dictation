@@ -16,7 +16,7 @@ class BackgroundSettingsActivity : SettingsScreen() {
     companion object {
         const val BACKGROUND_INTRO =
             "Many phones stop apps in the background to save battery, or when you clear the recent apps. " +
-                "Android then often doesn't restart Phone Whisper: the accessibility settings show it as not " +
+                "Android then often doesn't restart Offline AI Dictation: the accessibility settings show it as not " +
                 "working until you turn it off and on again. These settings prevent that."
     }
 }

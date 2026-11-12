@@ -4,3 +4,8 @@ build/
 local.properties
 .env
 *.apk
+
+# Signing key settings (password lives here; never commit)
+keystore.properties
+*.jks
+*.keystore

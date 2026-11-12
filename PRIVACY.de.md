@@ -1,14 +1,14 @@
-# Datenschutzerklärung für Phone Whisper
+# Datenschutzerklärung für Offline AI Dictation
 
 [English](PRIVACY.md) | **Deutsch**
 
-Diese Erklärung gilt für den Fork unter [evilknivel/phone-whisper](https://github.com/evilknivel/phone-whisper) ab Version 1.0.0. Maßgeblich ist die [englische Fassung](PRIVACY.md); diese Übersetzung dient dem besseren Verständnis.
+Diese Erklärung gilt für den Fork unter [Nali007/offline-ai-dictation](https://github.com/Nali007/offline-ai-dictation), a fork of evilknivel/phone-whisper, ab Version 1.0.0. Maßgeblich ist die [englische Fassung](PRIVACY.md); diese Übersetzung dient dem besseren Verständnis.
 
-Phone Whisper ist eine Android-Diktier-App, die Sprache aufnimmt, transkribiert und das Ergebnis appübergreifend in Textfelder einfügt.
+Offline AI Dictation ist eine Android-Diktier-App, die Sprache aufnimmt, transkribiert und das Ergebnis appübergreifend in Textfelder einfügt.
 
 ## Umgang mit Daten
 
-Phone Whisper kennt zwei Transkriptionsmodi.
+Offline AI Dictation kennt zwei Transkriptionsmodi.
 
 ### Lokaler Modus
 
@@ -40,18 +40,18 @@ Es gibt keinen Zwischenserver für diese Anfragen.
 
 Bevor dich die App zu den Bedienungshilfe-Einstellungen des Systems schickt, erklärt sie, worauf der Dienst zugreift, und bittet um deine Zustimmung.
 
-Phone Whisper nutzt den Android-Bedienungshilfendienst nur, um das gerade fokussierte Textfeld zu finden und diktierten Text einzufügen, nachdem du ausdrücklich auf den schwebenden Button getippt hast, und um zu sehen, ob eine Tastatur offen ist, damit der Button nur dann erscheint. Inhalte von Textfeldern werden nicht protokolliert.
+Offline AI Dictation nutzt den Android-Bedienungshilfendienst nur, um das gerade fokussierte Textfeld zu finden und diktierten Text einzufügen, nachdem du ausdrücklich auf den schwebenden Button getippt hast, und um zu sehen, ob eine Tastatur offen ist, damit der Button nur dann erscheint. Inhalte von Textfeldern werden nicht protokolliert.
 
 Eingefügter Text wird in die Zwischenablage kopiert und eingefügt, außer du schaltest „Keep my clipboard“ ein. Kopierte Transkripte sind als sensibel markiert: Android blendet ihren Inhalt dann in der Vorschau der Zwischenablage aus, und Tastaturen, die diese Markierung beachten, schlagen sie nicht vor.
 
-Phone Whisper ist nicht dafür gedacht, das Surfverhalten zu überwachen, Bildschirminhalte für Analysen zu sammeln oder Abläufe im Hintergrund zu automatisieren.
+Offline AI Dictation ist nicht dafür gedacht, das Surfverhalten zu überwachen, Bildschirminhalte für Analysen zu sammeln oder Abläufe im Hintergrund zu automatisieren.
 
 ## Datenerhebung
 
-Für Phone Whisper gibt es keinen eigenen Server. Es werden keine Benutzerkonten, Analysedaten oder hochgeladenen Aufnahmen erhoben.
+Für Offline AI Dictation gibt es keinen eigenen Server. Es werden keine Benutzerkonten, Analysedaten oder hochgeladenen Aufnahmen erhoben.
 
 Drittanbieter, die du selbst nutzt, etwa OpenAI oder OpenRouter, können Daten nach ihren eigenen Bedingungen und Datenschutzerklärungen verarbeiten.
 
 ## Kontakt
 
-Fragen zum Datenschutz in diesem Fork stellst du als Issue unter [github.com/evilknivel/phone-whisper/issues](https://github.com/evilknivel/phone-whisper/issues). Zur ursprünglichen App von Pol Alvarez siehe [kafkasl/phone-whisper](https://github.com/kafkasl/phone-whisper).
+Fragen zum Datenschutz in diesem Fork stellst du als Issue unter [github.com/Nali007/offline-ai-dictation/issues](https://github.com/Nali007/offline-ai-dictation/issues). Zur ursprünglichen App von Pol Alvarez siehe [kafkasl/phone-whisper](https://github.com/kafkasl/phone-whisper).

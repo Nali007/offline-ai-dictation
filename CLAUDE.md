@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Offline AI Dictation (read first)
+
+This repo is **Offline AI Dictation** (app ID `com.naj.offlineaidictation`), Naj's fork of evilknivel's Phone Whisper 1.3.0. The plan, rules and decisions live in his Notion page "Build brief: Offline Dictation, version 1"; read it before building. Key rules: describe each feature and ask "Should I build it?" before building; explain in plain words (Naj is a beginner); never show the name "Phone Whisper" or its logo on screen (credits on About are fine); free tools only. The Kotlin package and namespace stay `com.evilknivel.phonewhisper` on purpose so upstream fixes merge cleanly; only `applicationId` changed. Release builds are signed from `keystore.properties` (git-ignored; points to the key outside the repo). Install on Naj's Samsung Galaxy S22 Ultra with `./gradlew assembleRelease` and `adb install --user 0 -r app/build/outputs/apk/release/app-release.apk` (`--user 0`: without it the phone also installs a copy into Samsung Dual Messenger, user 95, which shows as a second badged icon; use release, not debug: the two are signed differently and can't install over each other). Since 0.1.1: translation is hidden (the arc isn't opened on hold; the code stays for rewrite styles), and online speech (`use_local` off) and online cleanup (`online_cleanup`, read through `Prefs.effectiveCleanupMode()`) are switches under Advanced, off by default; the setup assistant skips its MODE, CLOUD and CLEANUP steps. The section below describes the inherited Phone Whisper code and is still accurate for it; `docs/` and the German README were removed.
+
 ## What this is
 
 Phone Whisper is a single-module Android app (Kotlin, package and app ID `com.evilknivel.phonewhisper` since 1.1.0, before that `com.kafkasl.phonewhisper`; minSdk 30, targetSdk 36, compileSdk 37, JDK 17, arm64-v8a only; AGP 9 with its built-in Kotlin, Gradle 9). It shows a floating push-to-talk overlay button, records audio, trims silence (Silero VAD), transcribes it locally (sherpa-onnx: Parakeet, Whisper, Moonshine) or in the cloud (OpenAI, OpenRouter, or a custom OpenAI-compatible server), optionally cleans up the text with a chat model from one of those providers, and inserts the result into the focused text field of whatever app is in the foreground. This repo is a fork of kafkasl/phone-whisper; README.md ends with a short development history.
@@ -67,9 +71,8 @@ Prefs keys: `use_local`, `model_name`, `language` (ISO 639-1, "" = detect), `num
 
 ## Documentation
 
-README.md, PRIVACY.md and CONTRIBUTING.md are the English originals and always come first; README.de.md, PRIVACY.de.md and CONTRIBUTING.de.md are German translations with a language switch at the top. Update both languages when behavior changes, and add user-visible changes to CHANGELOG.md. The app's UI strings are still hard-coded in Kotlin; CONTRIBUTING.md asks for help moving them to `strings.xml` for translations.
+README.md, PRIVACY.md and CONTRIBUTING.md are the English originals and always come first; PRIVACY.de.md and CONTRIBUTING.de.md are German translations with a language switch at the top (there is no German README any more). Update both languages when behavior changes, and add user-visible changes to CHANGELOG.md. The app's UI strings are still hard-coded in Kotlin; CONTRIBUTING.md asks for help moving them to `strings.xml` for translations.
 
 ## Other directories
 
-- `docs/` is the static GitHub Pages site (landing page, privacy page, JS demo animations). It is not part of the app build.
 - `PRIVACY.md` (and `PRIVACY.de.md`) describes the data flows (local vs. direct to OpenAI/OpenRouter/custom server, model downloads, clipboard). Keep it in sync if network behavior changes.

@@ -81,7 +81,7 @@ object BackgroundSettings {
             Vendor.XIAOMI -> {
                 add(Step(
                     "Allow Autostart",
-                    "Turn on Autostart for Phone Whisper. Without it the system won't restart the service after clearing recent apps",
+                    "Turn on Autostart for Offline AI Dictation. Without it the system won't restart the service after clearing recent apps",
                     listOf(ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")),
                     status = ::xiaomiAutostart,
                 ))
@@ -93,14 +93,14 @@ object BackgroundSettings {
                         ComponentName("com.miui.securitycenter", "com.miui.appmanager.ApplicationsDetailsActivity"),
                         ComponentName("com.miui.powerkeeper", "com.miui.powerkeeper.ui.HiddenAppsConfigActivity"),
                     ),
-                    extras = mapOf("package_name" to packageName, "package_label" to "Phone Whisper"),
+                    extras = mapOf("package_name" to packageName, "package_label" to "Offline AI Dictation"),
                 ))
             }
             Vendor.SAMSUNG -> {
                 add(batteryStep("Battery: Unrestricted", "Tap Battery and choose \"Unrestricted\""))
                 add(Step(
                     "Never sleeping apps",
-                    "Background usage limits → Never sleeping apps → + → Phone Whisper. Also make sure it isn't under Sleeping or Deep sleeping apps",
+                    "Background usage limits → Never sleeping apps → + → Offline AI Dictation. Also make sure it isn't under Sleeping or Deep sleeping apps",
                     listOf(
                         ComponentName("com.samsung.android.lool", "com.samsung.android.sm.battery.ui.BatteryActivity"),
                         ComponentName("com.samsung.android.sm", "com.samsung.android.sm.battery.ui.BatteryActivity"),
@@ -111,19 +111,19 @@ object BackgroundSettings {
                 val pkg = if (vendor == Vendor.HONOR) "com.hihonor.systemmanager" else "com.huawei.systemmanager"
                 add(Step(
                     "App launch: manage manually",
-                    "Turn off \"Manage automatically\" for Phone Whisper, then keep Auto-launch, Secondary launch and Run in background on",
+                    "Turn off \"Manage automatically\" for Offline AI Dictation, then keep Auto-launch, Secondary launch and Run in background on",
                     listOf(
                         ComponentName(pkg, "$pkg.startupmgr.ui.StartupNormalAppListActivity"),
                         ComponentName(pkg, "$pkg.appcontrol.activity.StartupAppControlActivity"),
                         ComponentName(pkg, "$pkg.optimize.process.ProtectActivity"),
                     ),
                 ))
-                add(batteryStep("Battery optimization: Don't allow", "Choose \"All apps\", find Phone Whisper and choose \"Don't allow\""))
+                add(batteryStep("Battery optimization: Don't allow", "Choose \"All apps\", find Offline AI Dictation and choose \"Don't allow\""))
             }
             Vendor.OPPO -> {
                 add(Step(
                     "Allow auto launch",
-                    "Turn on auto launch (Auto startup) for Phone Whisper",
+                    "Turn on auto launch (Auto startup) for Offline AI Dictation",
                     listOf(
                         ComponentName("com.coloros.safecenter", "com.coloros.safecenter.startupapp.StartupAppListActivity"),
                         ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity"),
@@ -137,7 +137,7 @@ object BackgroundSettings {
             Vendor.VIVO -> {
                 add(Step(
                     "Allow background and auto start",
-                    "Allow auto start and high background power consumption for Phone Whisper",
+                    "Allow auto start and high background power consumption for Offline AI Dictation",
                     listOf(
                         ComponentName("com.vivo.permissionmanager", "com.vivo.permissionmanager.activity.BgStartUpManagerActivity"),
                         ComponentName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.BgStartUpManager"),
@@ -150,7 +150,7 @@ object BackgroundSettings {
             Vendor.ASUS -> {
                 add(Step(
                     "Allow auto-start",
-                    "Allow auto-start for Phone Whisper",
+                    "Allow auto-start for Offline AI Dictation",
                     listOf(
                         ComponentName("com.asus.mobilemanager", "com.asus.mobilemanager.autostart.AutoStartActivity"),
                         ComponentName("com.asus.mobilemanager", "com.asus.mobilemanager.entry.FunctionActivity"),
@@ -161,7 +161,7 @@ object BackgroundSettings {
             Vendor.MEIZU -> {
                 add(Step(
                     "Allow running in the background",
-                    "Allow Phone Whisper to run in the background",
+                    "Allow Offline AI Dictation to run in the background",
                     listOf(ComponentName("com.meizu.safe", "com.meizu.safe.permission.SmartBGActivity")),
                 ))
                 add(batteryStep("Battery: Unrestricted", "Tap Battery and choose \"Unrestricted\""))
@@ -169,7 +169,7 @@ object BackgroundSettings {
             Vendor.TRANSSION -> {
                 add(Step(
                     "Allow auto start",
-                    "Turn on auto start for Phone Whisper",
+                    "Turn on auto start for Offline AI Dictation",
                     listOf(ComponentName("com.transsion.phonemaster", "com.cyin.himgr.autostart.AutoStartActivity")),
                 ))
                 add(batteryStep("Battery: Unrestricted", "Tap Battery and choose \"Unrestricted\""))

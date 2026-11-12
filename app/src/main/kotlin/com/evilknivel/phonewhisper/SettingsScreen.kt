@@ -173,11 +173,11 @@ abstract class SettingsScreen : AppCompatActivity() {
         }
         if (BackgroundSettings.hasRecentsLock(vendor)) {
             addView(note(
-                "Also lock Phone Whisper in the recent apps: open this screen, open the recent apps, then " +
-                    "long-press (or swipe down on) Phone Whisper and tap the lock. \"Clear all\" then leaves it running."
+                "Also lock Offline AI Dictation in the recent apps: open this screen, open the recent apps, then " +
+                    "long-press (or swipe down on) Offline AI Dictation and tap the lock. \"Clear all\" then leaves it running."
             ))
         }
-        addView(note("Settings for ${vendor.label}. If a screen doesn't open, Phone Whisper's app info opens instead."))
+        addView(note("Settings for ${vendor.label}. If a screen doesn't open, Offline AI Dictation's app info opens instead."))
     }
 
     /** A short explanation under a group of rows. */

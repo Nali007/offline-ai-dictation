@@ -1,14 +1,14 @@
-# Privacy Policy for Phone Whisper
+# Privacy Policy for Offline AI Dictation
 
 **English** | [Deutsch](PRIVACY.de.md)
 
-This policy covers the fork at [evilknivel/phone-whisper](https://github.com/evilknivel/phone-whisper), version 1.0.0 and later.
+This policy covers the fork at [Nali007/offline-ai-dictation](https://github.com/Nali007/offline-ai-dictation), a fork of evilknivel/phone-whisper,, version 1.0.0 and later.
 
-Phone Whisper is an Android dictation app that records speech, transcribes it, and inserts the result into text fields across apps.
+Offline AI Dictation is an Android dictation app that records speech, transcribes it, and inserts the result into text fields across apps.
 
 ## Data handling
 
-Phone Whisper supports two transcription modes.
+Offline AI Dictation supports two transcription modes.
 
 ### Local mode
 
@@ -40,18 +40,18 @@ I do not operate a relay server for these requests.
 
 Before you are sent to the system's accessibility settings, the app explains what the service accesses and asks for your agreement.
 
-Phone Whisper uses Android Accessibility Service only to identify the currently focused text field and insert dictated text after you explicitly interact with the floating overlay button, and to see whether a keyboard is open so the button can be shown only then. It does not log the contents of text fields.
+Offline AI Dictation uses Android Accessibility Service only to identify the currently focused text field and insert dictated text after you explicitly interact with the floating overlay button, and to see whether a keyboard is open so the button can be shown only then. It does not log the contents of text fields.
 
 Inserted text is copied to the clipboard and pasted, unless you turn on "Keep my clipboard". Copied transcripts are marked as sensitive: Android then hides their content in the clipboard preview, and keyboards that honor the flag don't show them as suggestions.
 
-Phone Whisper is not designed to monitor browsing, collect screen content for analytics, or perform background automation.
+Offline AI Dictation is not designed to monitor browsing, collect screen content for analytics, or perform background automation.
 
 ## Data collection
 
-I do not run a backend for Phone Whisper and do not collect user accounts, analytics, or uploaded recordings myself.
+I do not run a backend for Offline AI Dictation and do not collect user accounts, analytics, or uploaded recordings myself.
 
 Third-party services you choose to use, such as OpenAI or OpenRouter, may process data according to their own terms and privacy policies.
 
 ## Contact
 
-For questions about privacy in this fork, open an issue at [github.com/evilknivel/phone-whisper/issues](https://github.com/evilknivel/phone-whisper/issues). For the original app by Pol Alvarez, see [kafkasl/phone-whisper](https://github.com/kafkasl/phone-whisper).
+For questions about privacy in this fork, open an issue at [github.com/Nali007/offline-ai-dictation/issues](https://github.com/Nali007/offline-ai-dictation/issues). For the original app by Pol Alvarez, see [kafkasl/phone-whisper](https://github.com/kafkasl/phone-whisper).
